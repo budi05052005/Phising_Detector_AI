@@ -709,9 +709,58 @@ footer {
     border-radius: 16px;
   }
 
+  /* Responsive Tables on Tablet */
+  .cyber-table {
+    display: table !important;
+    width: 100% !important;
+    min-width: 850px !important;
+  }
+
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  /* Custom visible scrollbar for scrollable tables */
+  .table-responsive::-webkit-scrollbar {
+    height: 6px;
+  }
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    border-radius: 4px;
+  }
+  .table-responsive::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+
   .cyber-table th, .cyber-table td {
     padding: 0.75rem 0.6rem;
     font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  /* Dashboard Header wrap on Tablet */
+  main > .d-flex.flex-wrap.justify-content-between {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  /* Cyber Card header wrapping on Tablet to prevent text squeezing */
+  .cyber-card > .d-flex.justify-content-between {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .cyber-card > .d-flex.justify-content-between > .d-flex {
+    width: 100%;
+    justify-content: flex-start !important;
+    gap: 8px;
   }
 }
 
@@ -815,10 +864,9 @@ footer {
 
   /* Responsive Tables */
   .cyber-table {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    display: table !important;
+    width: 100% !important;
+    min-width: 850px !important;
   }
 
   .cyber-table th, .cyber-table td {
@@ -862,6 +910,60 @@ footer {
   .chart-container {
     min-height: 200px !important;
     height: 200px !important;
+  }
+
+  /* Mobile Dashboard Adaptations */
+  .stat-card {
+    padding: 1rem 0.5rem !important;
+  }
+  .stat-number {
+    font-size: 1.6rem !important;
+  }
+  .stat-card-label {
+    font-size: 0.72rem !important;
+  }
+  h1.h3 {
+    font-size: 1.25rem !important;
+  }
+  .btn-cyber-pdf,
+  .btn-cyber-outline,
+  .btn-cyber {
+    font-size: 0.8rem !important;
+    padding: 0.5rem 0.8rem !important;
+    width: auto;
+  }
+  .chart-container {
+    height: 180px !important;
+    min-height: 180px !important;
+  }
+
+  /* Compact layouts for full audit output cards on mobile */
+  .cyber-table th, .cyber-table td {
+    padding: 0.5rem 0.4rem !important;
+    font-size: 0.72rem !important;
+  }
+  .metric-box {
+    padding: 0.8rem !important;
+  }
+  .metric-label {
+    font-size: 0.7rem !important;
+    margin-bottom: 2px !important;
+  }
+  .metric-value {
+    font-size: 0.9rem !important;
+  }
+  #resBadge {
+    font-size: 0.8rem !important;
+    padding: 0.3rem 0.8rem !important;
+  }
+  #resScoreText {
+    font-size: 1.2rem !important;
+  }
+  .accessibility-panel {
+    width: 92% !important;
+    left: 4% !important;
+    right: 4% !important;
+    bottom: 80px !important;
   }
 }
 

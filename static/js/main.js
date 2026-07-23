@@ -1172,11 +1172,7 @@ function renderAdminCharts(history) {
    ========================================================================== */
 
 window.downloadCurrentScanEStatement = function() {
-  if (lastScanResultData) {
-    generateEStatementPDF([lastScanResultData], 'AUDIT_CURRENT_SCAN');
-  } else {
-    openEStatementModal();
-  }
+  openEStatementModal();
 };
 
 window.downloadSingleEStatement = function(scanId) {
@@ -1217,7 +1213,7 @@ window.openEStatementModal = function() {
             </p>
             <div class="d-flex flex-column gap-2 mb-4">
               <label class="period-option-card">
-                <input type="radio" name="statementPeriod" value="today" checked onchange="updateEStatementModalPreview()">
+                <input type="radio" name="statementPeriod" value="today" onchange="updateEStatementModalPreview()">
                 <div class="d-flex justify-content-between align-items-center w-100 ms-2">
                   <span>📅 <strong>Harian</strong> (Scan Hari Ini)</span>
                   <span id="cntToday" class="badge bg-primary">0</span>
@@ -1245,7 +1241,7 @@ window.openEStatementModal = function() {
                 </div>
               </label>
               <label class="period-option-card">
-                <input type="radio" name="statementPeriod" value="all" onchange="updateEStatementModalPreview()">
+                <input type="radio" name="statementPeriod" value="all" checked onchange="updateEStatementModalPreview()">
                 <div class="d-flex justify-content-between align-items-center w-100 ms-2">
                   <span>🌐 <strong>Semua Riwayat</strong> (All-Time History)</span>
                   <span id="cntAll" class="badge bg-success">0</span>
@@ -1488,58 +1484,15 @@ function generateEStatementPDF(scanDataArray, filenamePrefix) {
         margin: [0.2, 0.2, 0.2, 0.2],
         filename: pdfFileName,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, backgroundColor: '#070b19', useCORS: true },
+        html2canvas: { scale: 2, backgroundColor: '#070b19', useCORS: true, scrollX: 0, scrollY: 0 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(pdfContainer).output('blob').then((blob) => {
+      html2pdf().set(opt).from(pdfContainer).save().then(() => {
         // Remove temporary container
         if (document.getElementById('tempPdfContainer')) {
           document.body.removeChild(pdfContainer);
         }
-
-        // 1. Direct Client-Side Blob File Download (Fast & Native)
-        try {
-          const blobUrl = URL.createObjectURL(blob);
-          const downloadAnchor = document.createElement('a');
-          downloadAnchor.href = blobUrl;
-          downloadAnchor.download = pdfFileName;
-          document.body.appendChild(downloadAnchor);
-          downloadAnchor.click();
-          setTimeout(() => {
-            if (document.body.contains(downloadAnchor)) document.body.removeChild(downloadAnchor);
-            URL.revokeObjectURL(blobUrl);
-          }, 300);
-        } catch (downloadErr) {
-          console.warn('Direct Blob Download fallback triggered:', downloadErr);
-        }
-
-        // 2. Fallback Server POST API Endpoint
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = function() {
-          const base64data = reader.result.split(',')[1];
-          const form = document.createElement('form');
-          form.method = 'POST';
-          form.action = '/api/download-pdf';
-          form.style.display = 'none';
-
-          const inputData = document.createElement('input');
-          inputData.type = 'hidden';
-          inputData.name = 'pdf_base64';
-          inputData.value = base64data;
-
-          const inputName = document.createElement('input');
-          inputName.type = 'hidden';
-          inputName.name = 'filename';
-          inputName.value = pdfFileName;
-
-          form.appendChild(inputData);
-          form.appendChild(inputName);
-          document.body.appendChild(form);
-          form.submit();
-          document.body.removeChild(form);
-        };
       }).catch((err) => {
         console.error('html2pdf save error, using fallback print window:', err);
         fallbackPrintWindow(pdfContainer, pdfFileName);

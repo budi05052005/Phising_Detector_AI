@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live administrative monitoring dashboard of system users, scanned URLs, phishing threats, and system performance metrics on AI Link Guard.">
   <title>Admin System Analytics | AI Link Guard - BITSMIKRO 2026</title>
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -44,8 +45,8 @@
   <main class="container my-5">
     
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-      <div class="d-flex align-items-center gap-3">
-        <a href="/" class="btn btn-cyber-outline btn-sm">
+      <div class="d-flex align-items-start gap-3">
+        <a href="/" class="btn btn-cyber-outline btn-sm" style="margin-top: 4px;">
           <i class="bi bi-arrow-left"></i> Kembali
         </a>
         <div>
@@ -67,28 +68,28 @@
 
     <!-- Stat Counters Grid -->
     <div id="adminStatsContainer" class="row g-4 mb-4">
-      <div class="col-md-3">
+      <div class="col-6 col-md-3">
         <div class="cyber-card stat-card">
           <div class="text-info fs-3 mb-1"><i class="bi bi-people-fill"></i></div>
           <div id="statTotalUsers" class="stat-number">0</div>
           <div class="stat-card-label">Total Registered Members</div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-6 col-md-3">
         <div class="cyber-card stat-card">
           <div class="text-info fs-3 mb-1"><i class="bi bi-search font-monospace"></i></div>
           <div id="statTotalScans" class="stat-number">0</div>
           <div class="stat-card-label">Total URLs Analyzed</div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-6 col-md-3">
         <div class="cyber-card stat-card">
           <div class="text-danger fs-3 mb-1"><i class="bi bi-radioactive"></i></div>
           <div id="statThreatScans" class="stat-number text-danger" style="-webkit-text-fill-color: #ff0055;">0</div>
           <div class="stat-card-label text-danger">High Risk Phishing Threats</div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-6 col-md-3">
         <div class="cyber-card stat-card">
           <div class="text-success fs-3 mb-1"><i class="bi bi-check-circle-fill"></i></div>
           <div id="statSafeScans" class="stat-number text-success" style="-webkit-text-fill-color: #00ff88;">0</div>
