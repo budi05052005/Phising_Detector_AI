@@ -7,26 +7,26 @@
 let lastScanResultData = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  initLocalStorage();
-  initNavbar();
-  init3DEngine();
-  initFloatingWidgets();
-  detectClientProfile();
+  try { initLocalStorage(); } catch (e) { console.error('initLocalStorage error:', e); }
+  try { initNavbar(); } catch (e) { console.error('initNavbar error:', e); }
+  try { init3DEngine(); } catch (e) { console.error('init3DEngine error:', e); }
+  try { initFloatingWidgets(); } catch (e) { console.error('initFloatingWidgets error:', e); }
+  try { detectClientProfile(); } catch (e) { console.error('detectClientProfile error:', e); }
 
   if (document.getElementById('scanForm')) {
-    initScanner();
+    try { initScanner(); } catch (e) { console.error('initScanner error:', e); }
   }
   if (document.getElementById('loginForm')) {
-    initLoginForm();
+    try { initLoginForm(); } catch (e) { console.error('initLoginForm error:', e); }
   }
   if (document.getElementById('registerForm')) {
-    initRegisterForm();
+    try { initRegisterForm(); } catch (e) { console.error('initRegisterForm error:', e); }
   }
   if (document.getElementById('memberHistoryTable')) {
-    renderMemberDashboard();
+    try { renderMemberDashboard(); } catch (e) { console.error('renderMemberDashboard error:', e); }
   }
   if (document.getElementById('adminStatsContainer')) {
-    renderAdminDashboard();
+    try { renderAdminDashboard(); } catch (e) { console.error('renderAdminDashboard error:', e); }
   }
 });
 
@@ -515,8 +515,15 @@ function initScanner() {
 
   window.fillSampleUrl = function(sampleUrl) {
     urlInput.value = sampleUrl;
-    scanForm.dispatchEvent(new Event('submit'));
+    scanForm.dispatchEvent(new Event('submit', { cancelable: true }));
   };
+
+  window.triggerUrlScan = function() {
+    if (urlInput && urlInput.value.trim()) {
+      scanForm.dispatchEvent(new Event('submit', { cancelable: true }));
+    }
+  };
+}
 function makeIpLink(ipVal) {
   if (!ipVal || ipVal === '--' || ipVal === 'Unresolvable' || ipVal === 'N/A') return '--';
   const rawIp = ipVal.split(' ')[0].trim();
