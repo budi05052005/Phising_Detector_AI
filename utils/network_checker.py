@@ -223,6 +223,8 @@ def check_network(url: str) -> dict:
                 expiration_date = exp if isinstance(exp, datetime.datetime) else datetime.datetime.combine(exp, datetime.time.min)
             
             if creation_date:
+                if creation_date.tzinfo is not None:
+                    creation_date = creation_date.replace(tzinfo=None)
                 now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
                 domain_age_days = max(0, (now - creation_date).days)
                 if domain_age_days < 30:
