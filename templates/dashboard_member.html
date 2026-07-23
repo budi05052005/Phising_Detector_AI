@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Dashboard | AI Link Guard - BITSMIKRO 2026</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- 3D Canvas Background -->
+  <canvas id="cyberCanvas3D"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg cyber-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AI Link Guard Logo">
+        <span>AI LINK GUARD</span>
+        <span class="brand-badge ms-2">MEMBER HUB</span>
+      </a>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-center" id="navUserControls">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-5">
+    
+    <!-- Profile & Quick Action Header with Back Button -->
+    <div class="row align-items-center mb-4 g-3">
+      <div class="col-md-7 d-flex align-items-center gap-3">
+        <a href="/" class="btn btn-cyber-outline btn-sm">
+          <i class="bi bi-arrow-left"></i> Kembali
+        </a>
+        <div>
+          <h1 class="h3 text-white fw-bold mb-1">
+            Welcome Back, <span id="memberNameDisplay" class="text-info">Member</span>
+          </h1>
+          <p class="text-light mb-0 font-monospace">
+            Personal Cyber Link Scanner & History Vault &bull; <span id="memberEmailDisplay" class="text-info">--</span>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-5 text-md-end d-flex align-items-center justify-content-md-end gap-2">
+        <button class="btn btn-cyber-pdf btn-sm" onclick="downloadFullMemberEStatement()">
+          <i class="bi bi-file-earmark-pdf-fill"></i> Download E-Statement PDF
+        </button>
+        <a href="/" class="btn btn-cyber btn-sm">
+          <i class="bi bi-plus-circle me-1"></i> Scan Link
+        </a>
+      </div>
+    </div>
+
+    <!-- Grafik & Analytics Row -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-5">
+        <div class="cyber-card p-4 h-100">
+          <h2 class="h6 text-info mb-3 font-monospace fw-bold">
+            <i class="bi bi-pie-chart-fill me-2"></i>PERSONAL RISK BREAKDOWN
+          </h2>
+          <div class="chart-container" style="height: 200px;">
+            <canvas id="memberThreatDonutChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <div class="cyber-card p-4 h-100 d-flex flex-column justify-content-center">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="fs-1 text-info"><i class="bi bi-shield-check"></i></div>
+            <div>
+              <h3 class="h5 text-white mb-1 fw-bold">Bank-Grade Audit E-Statement Available</h3>
+              <p class="text-light small mb-0">Export your official security audit report formatted with cryptographic checksum verification and breakdown tables.</p>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-cyber-pdf" onclick="downloadFullMemberEStatement()">
+              <i class="bi bi-file-earmark-arrow-down-fill me-1"></i> GENERATE OFFICIAL PDF E-STATEMENT
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Table Cyber Card -->
+    <div class="cyber-card p-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 text-white mb-0 font-monospace fw-bold">
+          <i class="bi bi-clock-history text-info me-2"></i>YOUR RECENT LINK SCAN HISTORY
+        </h2>
+        <span class="badge bg-secondary font-monospace fs-6">LOCALSTORAGE VAULT</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="cyber-table">
+          <thead>
+            <tr>
+              <th>Scan ID</th>
+              <th>Target URL</th>
+              <th>Threat Level</th>
+              <th>Risk Score</th>
+              <th>Timestamp</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="memberHistoryTable">
+            <!-- Dynamically populated by JS from LocalStorage -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Three.js & Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}?v=20260723"></script>
+</body>
+</html>

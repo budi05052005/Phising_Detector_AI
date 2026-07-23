@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin System Analytics | AI Link Guard - BITSMIKRO 2026</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- 3D Canvas Background -->
+  <canvas id="cyberCanvas3D"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg cyber-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AI Link Guard Logo">
+        <span>AI LINK GUARD</span>
+        <span class="brand-badge bg-danger text-white ms-2">SYSTEM ADMIN</span>
+      </a>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-center" id="navUserControls">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-5">
+    
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+      <div class="d-flex align-items-center gap-3">
+        <a href="/" class="btn btn-cyber-outline btn-sm">
+          <i class="bi bi-arrow-left"></i> Kembali
+        </a>
+        <div>
+          <h1 class="h3 text-white fw-bold mb-1">
+            <i class="bi bi-shield-lock-fill text-danger me-2"></i>System Security Analytics Dashboard
+          </h1>
+          <p class="text-light mb-0 fw-semibold">Live monitoring of user activities, homograph threats, and scan metrics across the system.</p>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-cyber-pdf btn-sm" onclick="downloadSystemAdminEStatement()">
+          <i class="bi bi-file-earmark-pdf-fill"></i> Download System E-Statement (PDF)
+        </button>
+        <a href="/" class="btn btn-cyber-outline btn-sm">
+          <i class="bi bi-radar me-1"></i> Public Scanner
+        </a>
+      </div>
+    </div>
+
+    <!-- Stat Counters Grid -->
+    <div id="adminStatsContainer" class="row g-4 mb-4">
+      <div class="col-md-3">
+        <div class="cyber-card stat-card">
+          <div class="text-info fs-3 mb-1"><i class="bi bi-people-fill"></i></div>
+          <div id="statTotalUsers" class="stat-number">0</div>
+          <div class="stat-card-label">Total Registered Members</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="cyber-card stat-card">
+          <div class="text-info fs-3 mb-1"><i class="bi bi-search font-monospace"></i></div>
+          <div id="statTotalScans" class="stat-number">0</div>
+          <div class="stat-card-label">Total URLs Analyzed</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="cyber-card stat-card">
+          <div class="text-danger fs-3 mb-1"><i class="bi bi-radioactive"></i></div>
+          <div id="statThreatScans" class="stat-number text-danger" style="-webkit-text-fill-color: #ff0055;">0</div>
+          <div class="stat-card-label text-danger">High Risk Phishing Threats</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="cyber-card stat-card">
+          <div class="text-success fs-3 mb-1"><i class="bi bi-check-circle-fill"></i></div>
+          <div id="statSafeScans" class="stat-number text-success" style="-webkit-text-fill-color: #00ff88;">0</div>
+          <div class="stat-card-label text-success">Safe Verified Links</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik Analytics Section -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-5">
+        <div class="cyber-card p-4 h-100">
+          <h2 class="h6 text-info mb-3 font-monospace fw-bold">
+            <i class="bi bi-pie-chart-fill me-2"></i>SYSTEM THREAT DISTRIBUTION
+          </h2>
+          <div class="chart-container" style="height: 230px;">
+            <canvas id="adminDistributionChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="cyber-card p-4 h-100">
+          <h2 class="h6 text-info mb-3 font-monospace fw-bold">
+            <i class="bi bi-graph-up-arrow me-2"></i>24-HOUR THREAT vs SAFE ACTIVITY TRENDS
+          </h2>
+          <div class="chart-container" style="height: 230px;">
+            <canvas id="adminTrendsChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- System-Wide History Table -->
+    <div class="cyber-card p-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 text-white mb-0 font-monospace fw-bold">
+          <i class="bi bi-cpu-fill text-danger me-2"></i>ALL SYSTEM SCAN LOGS
+        </h2>
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-cyber-pdf btn-sm py-1 px-2" onclick="downloadSystemAdminEStatement()">
+            <i class="bi bi-file-earmark-pdf"></i> Export Log PDF
+          </button>
+          <span class="badge bg-danger font-monospace fs-6">LIVE AUDIT TRAIL</span>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="cyber-table">
+          <thead>
+            <tr>
+              <th>Scan ID</th>
+              <th>User</th>
+              <th>Target URL</th>
+              <th>Threat Level</th>
+              <th>Risk Score</th>
+              <th>Server IP</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="adminHistoryTable">
+            <!-- Dynamically populated by JS from LocalStorage -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Three.js & Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}?v=20260723"></script>
+</body>
+</html>

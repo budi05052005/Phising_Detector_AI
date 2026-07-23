@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Link Guard | Full Recon & 3D Phishing Detector</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- 3D Three.js Globe Canvas Background -->
+  <canvas id="cyberCanvas3D"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg cyber-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AI Link Guard Logo">
+        <span>AI LINK GUARD</span>
+        <span class="brand-badge ms-2">BITSMIKRO 2026</span>
+      </a>
+      <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-center" id="navUserControls">
+          <!-- Populated dynamically by main.js -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Hero Scanner Section -->
+  <main class="container my-5">
+    
+    <!-- Hero Header -->
+    <div class="text-center mb-5">
+      <div class="badge bg-primary text-white mb-2 px-3 py-2 fs-6 font-monospace shadow-sm" style="background: linear-gradient(135deg, #00f3ff, #9d4edd) !important;">
+        <i class="bi bi-cpu-fill me-1"></i> FULL RECON, DEVICE OS FINGERPRINT & 10 INTELLIGENCE MODULES
+      </div>
+      <h1 class="display-4 fw-extrabold text-white mb-3 tracking-tight">
+        AI Link Guard &bull; 3D Cyber Intelligence
+      </h1>
+      <p class="lead text-light max-w-2xl mx-auto font-sans fw-semibold">
+        Automated OSINT, Device OS Identification, Homograph Spoofing, Network Speed Metrics (Mbps/ms) & 10 Cyber Recon Intelligence Outputs.
+      </p>
+    </div>
+
+    <!-- Scanner Input Box -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-10">
+        <div class="cyber-card p-4 p-md-5">
+          <form id="scanForm" class="position-relative">
+            <div class="scan-line" id="scanLine"></div>
+            <label for="urlInput" class="form-label text-info font-monospace fw-bold mb-2 fs-6">
+              <i class="bi bi-terminal-fill me-1"></i> TARGET URL / DOMAIN FOR RECONNAISSANCE AUDIT:
+            </label>
+            <div class="cyber-input-group mb-3">
+              <input type="text" id="urlInput" class="cyber-input" placeholder="Masukkan Target Domain / URL (misal: https://pаypal.com atau github.com)" required autocomplete="off">
+              <button type="submit" class="btn btn-cyber ms-md-2 mt-2 mt-md-0 px-4" id="scanBtn">
+                <span class="spinner-border spinner-border-sm me-2 d-none" id="scanSpinner"></span>
+                <i class="bi bi-radar me-1"></i> RUN FULL AUDIT
+              </button>
+            </div>
+
+            <!-- Quick Presets -->
+            <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+              <span class="small text-light font-monospace fw-bold">Quick Tests:</span>
+              <button type="button" class="chip-btn" onclick="fillSampleUrl('https://pаypal.com/verify-login')">
+                🚨 Spoofed Cyrillic Homograph
+              </button>
+              <button type="button" class="chip-btn" onclick="fillSampleUrl('http://192.168.1.105/verify')">
+                ⚠️ IP Host
+              </button>
+              <button type="button" class="chip-btn" onclick="fillSampleUrl('https://google.com')">
+                ✅ Google.com (Safe)
+              </button>
+              <button type="button" class="chip-btn" onclick="fillSampleUrl('https://github.com')">
+                ✅ GitHub.com (Safe)
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result Dashboard Container -->
+    <div id="resultCard" class="d-none">
+      
+      <!-- Top Banner Summary & PDF Export Action -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 rounded-4" style="background: rgba(15, 23, 48, 0.95); border: 2px solid var(--neon-cyan); box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);">
+        <div class="d-flex align-items-center gap-3">
+          <span id="resBadge" class="badge-status success fs-6">SAFE LINK</span>
+          <div class="text-white font-monospace">
+            RISK SCORE: <strong id="resScoreText" class="fs-4">0%</strong>
+          </div>
+        </div>
+        <button class="btn btn-cyber-pdf" onclick="downloadCurrentScanEStatement()">
+          <i class="bi bi-file-earmark-pdf-fill me-1"></i> Export E-Statement (PDF)
+        </button>
+      </div>
+
+      <!-- DEEP DEVICE & CLIENT/SERVER OS FINGERPRINT BANNER -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="cyber-card p-4 h-100" style="border: 2px solid var(--neon-cyan); background: linear-gradient(135deg, rgba(12, 20, 42, 0.98), rgba(20, 10, 45, 0.98));">
+            <div class="d-flex align-items-start gap-3">
+              <div class="fs-1 text-info icon-badge-cyan"><i class="bi bi-server"></i></div>
+              <div>
+                <h5 class="text-info font-monospace fw-bold mb-2">
+                  <i class="bi bi-cpu-fill me-1"></i> TARGET SERVER INFRASTRUCTURE BANNER
+                </h5>
+                <p id="resDeviceFingerprint" class="h6 text-white font-monospace mb-0 fw-bold">
+                  Fetching Full Target Hardware, OS Kernel & Web Middleware...
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="cyber-card p-4 h-100" style="border: 2px solid var(--neon-purple); background: linear-gradient(135deg, rgba(12, 20, 42, 0.98), rgba(45, 10, 45, 0.98));">
+            <div class="d-flex align-items-start gap-3">
+              <div class="fs-1 text-purple icon-badge-purple"><i class="bi bi-diagram-3-fill"></i></div>
+              <div class="w-100">
+                <h5 class="text-purple font-monospace fw-bold mb-2" style="color: var(--neon-purple) !important;">
+                  <i class="bi bi-hdd-network-fill me-1"></i> TARGET SERVER NETWORK PROFILE
+                </h5>
+                <div class="text-white font-monospace small">
+                  <div class="mb-1"><strong>IP PUBLIC SERVER:</strong> <span id="targetPublicIp" class="text-info">--</span></div>
+                  <div class="mb-1"><strong>IP PRIVATE NODE:</strong> <span id="targetPrivateIp" class="text-warning">--</span></div>
+                  <div><strong>ISP & BGP ROUTER:</strong> <span id="targetIspRouter" class="text-light">--</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Risk Meter Gauge & 5D Threat Radar Chart -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-cyan"><i class="bi bi-shield-shaded"></i></span> RECONNAISSANCE RISK SCORE GAUGE
+            </h5>
+            <div class="risk-meter">
+              <div id="resRiskMeter" class="risk-meter-bar success"></div>
+            </div>
+            <div class="row g-3 mt-2">
+              <div class="col-md-6">
+                <div class="metric-box">
+                  <div class="metric-label">Target Domain</div>
+                  <div id="resDomain" class="metric-value text-truncate">--</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="metric-box">
+                  <div class="metric-label">Resolved IPv4</div>
+                  <div id="resIP" class="metric-value">--</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="metric-box">
+                  <div class="metric-label">SSL Certificate</div>
+                  <div id="resSSL" class="metric-value">--</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="metric-box">
+                  <div class="metric-label">Homograph Threat</div>
+                  <div id="resHomographStatus" class="metric-value">--</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-purple"><i class="bi bi-radar"></i></span> 5D THREAT VECTOR RADAR
+            </h5>
+            <div class="chart-container" style="height: 230px;">
+              <canvas id="scanRiskRadarChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FULL 10 INTELLIGENCE OUTPUT GRID -->
+      <div class="row g-4 mb-4">
+        
+        <!-- 1. NETWORK PERFORMANCE & SPEED METRICS -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-green"><i class="bi bi-lightning-charge-fill"></i></span> Output 1. Network Speed & Latency Metrics
+            </h5>
+            <table class="cyber-table">
+              <tr><td class="text-muted fw-bold">Latency (Ping RTT)</td><td id="resLatency" class="text-success font-monospace fw-bold">-</td></tr>
+              <tr><td class="text-muted fw-bold">Estimated Throughput</td><td id="resBandwidth" class="text-info font-monospace fw-bold">-</td></tr>
+              <tr><td class="text-muted fw-bold">Response Speed Score</td><td id="resSpeedRating">-</td></tr>
+              <tr><td class="text-muted fw-bold">Connection Status</td><td id="resConnStatus" class="text-white font-monospace">-</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. HOMOGRAPH & URL DECONSTRUCTION -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-red"><i class="bi bi-search"></i></span> Output 2. URL Analysis & Homograph Vector
+            </h5>
+            <table class="cyber-table">
+              <tr><td class="text-muted fw-bold">Raw Target Input</td><td id="resRawInput" class="text-white font-monospace text-truncate" style="max-width: 250px;">-</td></tr>
+              <tr><td class="text-muted fw-bold">Punycode ASCII</td><td id="resPunycode" class="text-danger font-monospace fw-bold">-</td></tr>
+              <tr><td class="text-muted fw-bold">Unicode Anomalies</td><td id="resUnicodeHex" class="text-warning font-monospace">-</td></tr>
+              <tr><td class="text-muted fw-bold">Target Port</td><td id="resPort" class="text-white font-monospace">-</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 3. WHOIS & DOMAIN LIFECYCLE -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-yellow"><i class="bi bi-file-earmark-code-fill"></i></span> Output 3. WHOIS & Domain Lifecycle
+            </h5>
+            <table class="cyber-table">
+              <tr><td class="text-muted fw-bold">Creation Date</td><td id="resWhoisCreated" class="text-white font-monospace">-</td></tr>
+              <tr><td class="text-muted fw-bold">Expiration Date</td><td id="resWhoisExpires" class="text-white font-monospace">-</td></tr>
+              <tr><td class="text-muted fw-bold">Domain Age Risk</td><td id="resDomainAge">-</td></tr>
+              <tr><td class="text-muted fw-bold">Registrar Name</td><td id="resRegistrar" class="text-white font-monospace">-</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. BGP, NETWORK INFRASTRUCTURE & GEO-LOCATION -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-pink"><i class="bi bi-globe2"></i></span> Output 4. BGP & Geo-Location Recon
+            </h5>
+            <table class="cyber-table mb-3">
+              <tr><td class="text-muted fw-bold">Autonomous System (ASN)</td><td id="resAsn" class="text-white font-monospace">-</td></tr>
+              <tr><td class="text-muted fw-bold">ISP / Org Name</td><td id="resIsp" class="text-white font-monospace">-</td></tr>
+              <tr><td class="text-muted fw-bold">Geographic Location</td><td id="resGeo" class="text-white font-monospace">-</td></tr>
+              <tr><td class="text-muted fw-bold">Google Maps Link</td><td id="resMaps">-</td></tr>
+            </table>
+            <!-- Interactive OpenStreetMap Embed -->
+            <div id="osmMapContainer" class="rounded-3 overflow-hidden d-none" style="height: 180px; border: 2px solid var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 127, 0.45);">
+              <iframe id="osmMapIframe" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. DNS RECORDS RECONNAISSANCE -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-cyan"><i class="bi bi-broadcast"></i></span> Output 5. DNS Records Reconnaissance
+            </h5>
+            <div id="resDnsRecords" class="metric-box p-3 font-monospace small" style="max-height: 180px; overflow-y: auto;">
+              Querying A, AAAA, MX, TXT, NS records...
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. HTTP SECURITY HEADERS AUDIT -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-green"><i class="bi bi-shield-check"></i></span> Output 6. HTTP Security Headers Audit
+            </h5>
+            <table class="cyber-table">
+              <tr><td class="text-muted fw-bold">Strict-Transport-Security (HSTS)</td><td id="hstsStatus">-</td></tr>
+              <tr><td class="text-muted fw-bold">Content-Security-Policy (CSP)</td><td id="cspStatus">-</td></tr>
+              <tr><td class="text-muted fw-bold">X-Frame-Options (Clickjacking)</td><td id="xfoStatus">-</td></tr>
+              <tr><td class="text-muted fw-bold">Server Banner Leakage</td><td id="serverHeader" class="text-white font-monospace">-</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 7. SSL / TLS CERTIFICATE DEEP AUDIT -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-purple"><i class="bi bi-lock-fill"></i></span> Output 7. SSL / TLS Certificate Deep Audit
+            </h5>
+            <table class="cyber-table">
+              <tr><td class="text-muted fw-bold">Certificate Issuer</td><td id="resSslIssuer" class="text-info font-monospace fw-bold">-</td></tr>
+              <tr><td class="text-muted fw-bold">Signature Algorithm</td><td id="resSslAlgorithm" class="text-white font-monospace">-</td></tr>
+              <tr><td class="text-muted fw-bold">Days Remaining</td><td id="resSslDays" class="text-success font-monospace fw-bold">-</td></tr>
+              <tr><td class="text-muted fw-bold">SANs Domain Count</td><td id="resSslSans" class="text-white font-monospace">-</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 8. REVERSE DNS & SUBDOMAIN ANALYSIS -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-yellow"><i class="bi bi-diagram-3-fill"></i></span> Output 8. Reverse DNS & Subdomain Analysis
+            </h5>
+            <table class="cyber-table">
+              <tr><td class="text-muted fw-bold">PTR Hostname Lookup</td><td id="resPtrRecord" class="text-white font-monospace text-truncate" style="max-width: 240px;">-</td></tr>
+              <tr><td class="text-muted fw-bold">Subdomain Depth Count</td><td id="resSubdomainDepth" class="text-info font-monospace fw-bold">-</td></tr>
+              <tr><td class="text-muted fw-bold">IP Address Type</td><td id="resIpType" class="text-white font-monospace">IPv4 Public Host</td></tr>
+              <tr><td class="text-muted fw-bold">Protocol Scheme</td><td id="resProtocolScheme" class="text-white font-monospace">HTTPS / HTTP</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 9. AUTOMATED THREAT & SECURITY FINDINGS SUMMARY -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-red"><i class="bi bi-exclamation-triangle-fill"></i></span> Output 9. AI Threat Findings Breakdown
+            </h5>
+            <ul id="resRiskFactors" class="list-unstyled mb-0 font-monospace" style="max-height: 180px; overflow-y: auto;">
+              <!-- Dynamically populated by JS -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- 10. SOC THREAT INTELLIGENCE & MITIGATION PROTOCOLS -->
+        <div class="col-md-6">
+          <div class="cyber-card p-4 h-100" style="border: 2px solid var(--neon-pink);">
+            <h5 class="card-header-vibrant">
+              <span class="icon-badge-pink"><i class="bi bi-shield-lock-fill"></i></span> Output 10. SOC Threat Mitigation Protocols
+            </h5>
+            <table class="cyber-table">
+              <tr><td class="text-muted fw-bold">Threat Category</td><td id="resSocCategory" class="text-warning font-monospace fw-bold small">-</td></tr>
+              <tr><td class="text-muted fw-bold">SOC Action Protocol</td><td id="resSocAction" class="text-white small font-monospace">-</td></tr>
+              <tr><td class="text-muted fw-bold">Incident Priority</td><td id="resSocPriority" class="font-monospace fw-bold">-</td></tr>
+              <tr><td class="text-muted fw-bold">SHA-256 Forensics Hash</td><td id="resSocHash" class="text-info small font-monospace text-truncate" style="max-width: 200px;">-</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 11. CYBER ATTACK & INCIDENT HISTORY (DDoS, MALWARE, OSINT FORENSICS) -->
+        <div class="col-md-12">
+          <div class="cyber-card p-4 mt-3" style="border: 2px solid var(--neon-cyan); background: linear-gradient(135deg, rgba(12, 20, 42, 0.98), rgba(20, 30, 60, 0.98));">
+            <h5 class="card-header-vibrant text-info">
+              <span class="icon-badge-cyan"><i class="bi bi-activity"></i></span> Output 11. Deep Forensics: Cyber Attack & Incident History
+            </h5>
+            <div class="row g-3 mt-2">
+              <div class="col-md-4">
+                <div class="p-3 rounded-3 h-100" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(0, 243, 255, 0.15);">
+                  <div class="text-muted small fw-bold font-monospace"><i class="bi bi-water"></i> DDOS ATTACK HISTORY</div>
+                  <div id="resDdosHistory" class="text-white fw-bold font-monospace mt-1" style="font-size: 13px;">-</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-3 rounded-3 h-100" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(0, 243, 255, 0.15);">
+                  <div class="text-muted small fw-bold font-monospace"><i class="bi bi-bug-fill"></i> MALWARE INFECTION HISTORY</div>
+                  <div id="resMalwareHistory" class="text-white fw-bold font-monospace mt-1" style="font-size: 13px;">-</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-3 rounded-3 h-100" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(0, 243, 255, 0.15);">
+                  <div class="text-muted small fw-bold font-monospace"><i class="bi bi-calendar-event"></i> INCIDENT TIMELINE</div>
+                  <div id="resIncidentTimeline" class="text-warning fw-bold font-monospace mt-1" style="font-size: 13px;">-</div>
+                </div>
+              </div>
+            </div>
+            <div class="row g-3 mt-1">
+              <div class="col-md-6">
+                <div class="p-3 rounded-3 h-100" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(0, 243, 255, 0.15);">
+                  <div class="text-muted small fw-bold font-monospace"><i class="bi bi-search"></i> OSINT BLACKLIST STATUS</div>
+                  <div id="resOsintBlacklist" class="text-success fw-bold font-monospace mt-1" style="font-size: 13px;">-</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 rounded-3 h-100" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(0, 243, 255, 0.15);">
+                  <div class="text-muted small fw-bold font-monospace"><i class="bi bi-clock-history"></i> DEEP SCAN REAL-TIME TIMESTAMP</div>
+                  <div id="resScanTimestamp" class="text-info fw-bold font-monospace mt-1" style="font-size: 13px;">-</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- 12. FULL TARGET SERVER NETWORK SPECIFICATION (OUTPUS KHUSUS JARINGAN SERVER TARGET) -->
+        <div class="col-md-12">
+          <div class="cyber-card p-4 mt-3" style="border: 2px solid var(--neon-purple); background: linear-gradient(135deg, rgba(15, 23, 48, 0.98), rgba(30, 10, 50, 0.98)); box-shadow: 0 0 25px rgba(157, 78, 221, 0.25);">
+            <h5 class="card-header-vibrant" style="color: var(--neon-purple) !important;">
+              <span class="icon-badge-purple"><i class="bi bi-hdd-network-fill"></i></span> Output 12. Target Server Network Profile (Deep Network Spec)
+            </h5>
+            <div class="row g-3 mt-1">
+              <div class="col-md-4">
+                <table class="cyber-table">
+                  <tr><td class="text-muted fw-bold">IP Public Server</td><td id="netIpPublic" class="text-info font-monospace fw-bold">-</td></tr>
+                  <tr><td class="text-muted fw-bold">IP Private Node</td><td id="netIpPrivate" class="text-warning font-monospace">-</td></tr>
+                  <tr><td class="text-muted fw-bold">IP Asli / Host Node</td><td id="netIpAsli" class="text-white font-monospace text-truncate" style="max-width: 180px;">-</td></tr>
+                  <tr><td class="text-muted fw-bold">Kekuatan Sinyal & Latency</td><td id="netSignalSpeed" class="text-success font-monospace small">-</td></tr>
+                  <tr><td class="text-muted fw-bold">Keamanan Jaringan</td><td id="netKeamanan" class="text-info font-monospace small">-</td></tr>
+                </table>
+              </div>
+              <div class="col-md-4">
+                <table class="cyber-table">
+                  <tr><td class="text-muted fw-bold">Alamat MAC Node</td><td id="netMacAddress" class="text-warning font-monospace small">-</td></tr>
+                  <tr><td class="text-muted fw-bold">Status DHCP</td><td id="netDhcp" class="text-white font-monospace small">-</td></tr>
+                  <tr><td class="text-muted fw-bold">Proxy Shield / WAF</td><td id="netProxy" class="text-info font-monospace small">-</td></tr>
+                  <tr><td class="text-muted fw-bold">Pengaturan IP</td><td id="netIpSetting" class="text-white font-monospace small">-</td></tr>
+                  <tr><td class="text-muted fw-bold">Datacenter Router / BGP</td><td id="netRouter" class="text-white font-monospace text-truncate small" style="max-width: 180px;">-</td></tr>
+                </table>
+              </div>
+              <div class="col-md-4">
+                <table class="cyber-table">
+                  <tr><td class="text-muted fw-bold">Panjang Awalan (Subnet)</td><td id="netPrefixLength" class="text-white font-monospace small">-</td></tr>
+                  <tr><td class="text-muted fw-bold">DNS Server 1</td><td id="netDns1" class="text-info font-monospace small text-truncate" style="max-width: 180px;">-</td></tr>
+                  <tr><td class="text-muted fw-bold">DNS Server 2</td><td id="netDns2" class="text-info font-monospace small text-truncate" style="max-width: 180px;">-</td></tr>
+                  <tr><td class="text-muted fw-bold">Enskripsi Privasi</td><td id="netPrivasi" class="text-success font-monospace small">-</td></tr>
+                  <tr><td class="text-muted fw-bold">Tipe Berbayar / Cloud SLA</td><td id="netBerbayar" class="text-warning font-monospace small">-</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <div class="mb-2">
+        <strong class="text-info">AI LINK GUARD</strong> &bull; 3D Phishing & Homograph Detector Workbench
+      </div>
+      <div class="small">
+        Designed for BITSMIKRO Innovative Vibecode 2026 Competition &bull; 10 Cyber Intelligence Outputs
+      </div>
+    </div>
+  </footer>
+
+  <!-- Three.js & Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}?v=20260723_7"></script>
+</body>
+</html>
