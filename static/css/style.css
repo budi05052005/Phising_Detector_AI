@@ -38,11 +38,13 @@
   padding: 0;
 }
 
-body {
+html, body {
   font-family: var(--font-main);
   background-color: var(--bg-dark);
   color: var(--text-main);
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
   position: relative;
   font-size: calc(1rem * var(--font-scale));
@@ -82,7 +84,7 @@ body.dyslexic-font {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   z-index: -1;
   pointer-events: none;
@@ -94,7 +96,7 @@ body::before {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background: 
     radial-gradient(circle at 10% 15%, rgba(0, 243, 255, 0.18) 0%, transparent 45%),
@@ -498,6 +500,7 @@ body::before {
   font-family: var(--font-mono);
   background: linear-gradient(135deg, #ffffff 0%, var(--neon-cyan) 50%, var(--neon-purple) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0.3rem 0;
   text-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
@@ -719,11 +722,27 @@ footer {
   }
 
   .navbar-brand {
-    font-size: 1.2rem;
+    font-size: 0.95rem !important;
+    gap: 6px !important;
   }
 
   .navbar-brand img {
-    height: 36px;
+    height: 26px !important;
+  }
+
+  .cyber-navbar .container {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .navbar-toggler {
+    padding: 0.2rem 0.4rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  #active-device-badge {
+    font-size: 0.65rem !important;
+    padding: 0.2rem 0.4rem !important;
   }
 
   .brand-badge {
@@ -756,11 +775,35 @@ footer {
     border-radius: 12px;
   }
 
-  .btn-cyber {
+  #scanBtn {
     width: 100%;
     padding: 0.9rem 1.4rem;
     font-size: 0.95rem;
     border-radius: 12px;
+  }
+
+  .navbar-nav {
+    text-align: right;
+    align-items: flex-end !important;
+    width: 100%;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 0.85rem !important;
+    padding: 0.4rem 0.8rem !important;
+    width: auto !important;
+    display: inline-flex !important;
+    margin: 4px 0;
+  }
+
+  .navbar-nav .btn-cyber,
+  .navbar-nav .btn-cyber-outline {
+    font-size: 0.8rem !important;
+    padding: 0.4rem 1rem !important;
+    border-radius: 8px !important;
+    width: auto !important;
+    display: inline-flex !important;
+    margin: 4px 0;
   }
 
   .btn-cyber-pdf {
@@ -845,6 +888,149 @@ footer {
   .metric-value {
     font-size: 0.95rem;
   }
+}
+
+/* ==========================================================================
+   DYNAMIC DEVICE ADAPTATIONS (AUTO-DETECT SYSTEM)
+   ========================================================================== */
+
+/* 1. HP / Mobile Adaptation */
+body.device-hp {
+  font-size: 0.9rem;
+}
+body.device-hp h1.display-4 {
+  font-size: 1.6rem !important;
+}
+body.device-hp .lead {
+  font-size: 0.9rem !important;
+}
+body.device-hp .cyber-card {
+  padding: 1.1rem !important;
+  border-radius: 12px !important;
+}
+body.device-hp .cyber-input-group {
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+body.device-hp #scanBtn {
+  width: 100% !important;
+}
+body.device-hp .navbar-nav {
+  text-align: right;
+  align-items: flex-end !important;
+}
+body.device-hp .navbar-nav .nav-link {
+  font-size: 0.85rem !important;
+  padding: 0.4rem 0.8rem !important;
+  width: auto !important;
+  display: inline-flex !important;
+  margin: 4px 0;
+}
+body.device-hp .navbar-nav .btn-cyber,
+body.device-hp .navbar-nav .btn-cyber-outline {
+  font-size: 0.8rem !important;
+  padding: 0.4rem 1rem !important;
+  border-radius: 8px !important;
+  width: auto !important;
+  display: inline-flex !important;
+  margin: 4px 0;
+}
+
+/* 2. Tablet Adaptation */
+body.device-tablet {
+  font-size: 0.95rem;
+}
+body.device-tablet h1.display-4 {
+  font-size: 2.2rem !important;
+}
+body.device-tablet .cyber-card {
+  padding: 1.5rem !important;
+}
+
+/* 3. Laptop Adaptation */
+body.device-laptop {
+  font-size: 1rem;
+}
+
+/* 4. Komputer / Desktop PC Adaptation */
+body.device-komputer {
+  font-size: 1.05rem;
+}
+body.device-komputer .container {
+  max-width: 1350px !important;
+}
+
+/* 5. Smart TV Adaptation (10-Foot UI, Large fonts and spacing) */
+body.device-tv {
+  font-size: 1.35rem;
+  line-height: 1.6;
+}
+body.device-tv h1.display-4 {
+  font-size: 3.5rem !important;
+  text-shadow: 0 0 15px var(--neon-cyan);
+}
+body.device-tv .lead {
+  font-size: 1.5rem !important;
+}
+body.device-tv .cyber-card {
+  padding: 2.5rem !important;
+  margin-bottom: 2rem;
+  border-width: 3px !important;
+  box-shadow: 0 25px 70px rgba(0, 243, 255, 0.45) !important;
+}
+body.device-tv .btn-cyber, body.device-tv .btn-cyber-pdf {
+  padding: 1.4rem 2.8rem !important;
+  font-size: 1.25rem !important;
+}
+body.device-tv .cyber-input {
+  font-size: 1.3rem !important;
+  padding: 1.3rem 1.6rem !important;
+}
+body.device-tv .container {
+  max-width: 1700px !important;
+}
+
+/* 6. Proyektor / Projector Adaptation (Ultra High Contrast) */
+body.device-proyektor {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+body.device-proyektor::before {
+  background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.95) 0%, #000000 100%) !important;
+}
+body.device-proyektor .cyber-card {
+  background: #050811 !important;
+  border: 3px solid #00f3ff !important;
+  box-shadow: none !important;
+}
+body.device-proyektor .text-muted, body.device-proyektor .text-secondary {
+  color: #ffffff !important;
+  font-weight: bold;
+}
+body.device-proyektor .brand-badge {
+  border: 1px solid #ffffff;
+}
+
+/* 7. Head Unit Mobil / Car Dashboard Adaptation (Simplified, larger touch zones) */
+body.device-head-unit {
+  font-size: 1.1rem;
+}
+body.device-head-unit h1.display-4 {
+  font-size: 2rem !important;
+}
+body.device-head-unit .lead {
+  display: none !important;
+}
+body.device-head-unit .cyber-card {
+  padding: 1.5rem !important;
+  border-radius: 10px !important;
+}
+body.device-head-unit .btn-cyber, body.device-head-unit .chip-btn {
+  min-height: 56px !important;
+  font-size: 1.1rem !important;
+}
+body.device-head-unit #cyberCanvas3D {
+  opacity: 0.15;
 }
 
 

@@ -11,7 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
   try { initNavbar(); } catch (e) { console.error('initNavbar error:', e); }
   try { init3DEngine(); } catch (e) { console.error('init3DEngine error:', e); }
   try { initFloatingWidgets(); } catch (e) { console.error('initFloatingWidgets error:', e); }
+  try { runDeviceDetector(); } catch (e) { console.error('runDeviceDetector error:', e); }
   try { detectClientProfile(); } catch (e) { console.error('detectClientProfile error:', e); }
+
+  window.addEventListener('resize', () => {
+    try { runDeviceDetector(); } catch (e) {}
+  });
 
   if (document.getElementById('scanForm')) {
     try { initScanner(); } catch (e) { console.error('initScanner error:', e); }
@@ -146,7 +151,10 @@ function saveScanHistory(scanResult) {
     ssl_status: scanResult.network && scanResult.network.ssl_valid ? 'Valid SSL' : 'Insecure / No SSL',
     homograph_status: scanResult.homograph && scanResult.homograph.is_threat ? 'Spoofing Threat Detected' : 'Clean',
     risk_factors: scanResult.risk_factors || [],
-    timestamp: scanResult.scanned_at || new Date().toISOString().replace('T', ' ').substring(0, 19)
+    timestamp: scanResult.scanned_at || (() => {
+      const opts = { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+      return new Intl.DateTimeFormat('sv-SE', opts).format(new Date()) + " WIB";
+    })()
   };
 
   history.unshift(entry);
@@ -393,6 +401,88 @@ window.speakPageSummary = function() {
   utterance.lang = 'id-ID';
   utterance.rate = 1.0;
   window.speechSynthesis.speak(utterance);
+};
+
+window.runDeviceDetector = function() {
+  const badge = document.getElementById('active-device-badge');
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const userAgent = navigator.userAgent;
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+  let deviceType = "Laptop";
+  let icon = "bi-laptop";
+  let color = "#00f3ff"; // Neon Cyan
+
+  // TV Detection
+  const isTV = /SmartTV|GoogleTV|AppleTV|Roku|Tizen|WebOS|HbbTV|CastNL|Nexus Player|Xbox|PlayStation/i.test(userAgent) || 
+               (width >= 2560 && !isTouch);
+
+  // Car Head Unit Detection (Landscape touchscreen around 800-1024 width and 400-600 height, or user agent)
+  const isHeadUnit = /Android Auto|CarPlay|Automotive|QNX|IVI|HeadUnit/i.test(userAgent) ||
+                     (isTouch && width >= 800 && width <= 1024 && height >= 400 && height <= 600);
+
+  // Projector Detection (Common low-medium res ratios like 4:3 or 16:10 without touch screen)
+  const isProjector = (!isTouch && (
+    (Math.abs(width / height - 4/3) < 0.05 && width <= 1280) || 
+    (Math.abs(width / height - 16/10) < 0.05 && width <= 1440)
+  ));
+
+  if (isTV) {
+    deviceType = "Smart TV";
+    icon = "bi-tv";
+    color = "#9d4edd"; // Neon Purple
+  } else if (isProjector) {
+    deviceType = "Proyektor";
+    icon = "bi-projector-fill";
+    color = "#ffb700"; // Neon Yellow
+  } else if (isHeadUnit) {
+    deviceType = "Head Unit Mobil";
+    icon = "bi-speedometer2";
+    color = "#ff7700"; // Neon Orange
+  } else if (width <= 576 || /Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+    deviceType = "HP (Mobile)";
+    icon = "bi-phone";
+    color = "#00ff88"; // Neon Green
+  } else if ((width > 576 && width <= 992) || (/iPad|Tablet|PlayBook|Silk/i.test(userAgent) && isTouch)) {
+    deviceType = "Tablet";
+    icon = "bi-tablet";
+    color = "#ff007f"; // Neon Pink
+  } else if (width > 992 && width <= 1440) {
+    deviceType = "Laptop";
+    icon = "bi-laptop";
+    color = "#00f3ff"; // Neon Cyan
+  } else {
+    deviceType = "Komputer (Desktop)";
+    icon = "bi-pc-display";
+    color = "#0088ff"; // Neon Blue
+  }
+
+  // Update Badge in navbar
+  if (badge) {
+    badge.innerHTML = `<i class="bi ${icon} me-1"></i> ${deviceType}`;
+    badge.style.borderColor = color;
+    badge.style.color = color;
+    badge.style.boxShadow = `0 0 10px ${color}50`;
+  }
+
+  // Apply device type class to body for responsive CSS styling
+  const body = document.body;
+  body.classList.remove(
+    'device-hp', 'device-tablet', 'device-laptop', 
+    'device-komputer', 'device-tv', 'device-proyektor', 'device-head-unit'
+  );
+
+  let cleanClass = "device-laptop";
+  if (deviceType === "Smart TV") cleanClass = "device-tv";
+  else if (deviceType === "Proyektor") cleanClass = "device-proyektor";
+  else if (deviceType === "Head Unit Mobil") cleanClass = "device-head-unit";
+  else if (deviceType === "HP (Mobile)") cleanClass = "device-hp";
+  else if (deviceType === "Tablet") cleanClass = "device-tablet";
+  else if (deviceType === "Laptop") cleanClass = "device-laptop";
+  else if (deviceType === "Komputer (Desktop)") cleanClass = "device-komputer";
+
+  body.classList.add(cleanClass);
 };
 
 async function detectClientProfile() {

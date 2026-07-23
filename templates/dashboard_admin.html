@@ -14,16 +14,27 @@
   <!-- 3D Canvas Background -->
   <canvas id="cyberCanvas3D"></canvas>
 
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg cyber-navbar sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="/">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AI Link Guard Logo">
-        <span>AI LINK GUARD</span>
-        <span class="brand-badge bg-danger text-white ms-2">SYSTEM ADMIN</span>
-      </a>
+    <div class="container d-flex flex-column align-items-stretch">
+      <div class="d-flex align-items-center justify-content-between w-100">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AI Link Guard Logo">
+          <span>AI LINK GUARD</span>
+          <span class="brand-badge bg-danger text-white ms-2 d-none d-md-inline-block">SYSTEM ADMIN</span>
+        </a>
+        
+        <div class="d-flex align-items-center gap-2">
+          <span id="active-device-badge" class="badge" style="font-size: 0.75rem; font-family: var(--font-mono); border: 1px solid rgba(0, 243, 255, 0.5); background: rgba(6, 11, 26, 0.8); vertical-align: middle;">
+            <i class="bi bi-cpu"></i> Detecting...
+          </span>
+          <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+
       <div class="collapse navbar-collapse" id="navContent">
-        <ul class="navbar-nav ms-auto align-items-center" id="navUserControls">
+        <ul class="navbar-nav ms-auto align-items-center mt-2" id="navUserControls">
           <!-- Populated by JS -->
         </ul>
       </div>

@@ -308,8 +308,8 @@ def check_network(url: str) -> dict:
     if is_punycode or has_indicators or is_new_domain:
         is_suspicious_domain = True
 
-    current_time_utc = datetime.datetime.now(datetime.timezone.utc)
-    incident_timestamp_str = current_time_utc.strftime("%Y-%m-%d %H:%M:%S UTC")
+    wib_incident_time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=7)
+    incident_timestamp_str = wib_incident_time.strftime("%Y-%m-%d %H:%M:%S WIB")
     
     if is_suspicious_domain:
         ddos_history = "ACTIVE FLOOD SOURCE (High Volume HTTP Flood Attacks detected from this host)"

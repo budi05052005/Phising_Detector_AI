@@ -145,7 +145,8 @@ def analyze():
 
     risk_score = max(0, min(100, risk_score))
 
-    scanned_at_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    wib_time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=7)
+    scanned_at_str = wib_time.strftime("%Y-%m-%d %H:%M:%S WIB")
 
     if risk_score < 30:
         status = "SAFE"
