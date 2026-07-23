@@ -444,6 +444,7 @@ body::before {
   border-collapse: separate;
   border-spacing: 0 8px;
   margin-top: 0.8rem;
+  table-layout: fixed;
 }
 
 .cyber-table th {
@@ -465,6 +466,17 @@ body::before {
   color: #ffffff;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: normal;
+  word-break: break-all;
+}
+
+.table-responsive .cyber-table {
+  table-layout: auto;
+}
+
+.table-responsive .cyber-table td,
+.table-responsive .cyber-table th {
+  white-space: nowrap;
 }
 
 .cyber-table tr td:first-child {
@@ -710,7 +722,7 @@ footer {
   }
 
   /* Responsive Tables on Tablet */
-  .cyber-table {
+  .table-responsive .cyber-table {
     display: table !important;
     width: 100% !important;
     min-width: 850px !important;
@@ -737,7 +749,7 @@ footer {
     border-radius: 4px;
   }
 
-  .cyber-table th, .cyber-table td {
+  .table-responsive .cyber-table th, .table-responsive .cyber-table td {
     padding: 0.75rem 0.6rem;
     font-size: 0.85rem;
     white-space: nowrap;
@@ -863,13 +875,13 @@ footer {
   }
 
   /* Responsive Tables */
-  .cyber-table {
+  .table-responsive .cyber-table {
     display: table !important;
     width: 100% !important;
     min-width: 850px !important;
   }
 
-  .cyber-table th, .cyber-table td {
+  .table-responsive .cyber-table th, .table-responsive .cyber-table td {
     white-space: nowrap;
     padding: 0.65rem 0.5rem;
     font-size: 0.8rem;
@@ -938,7 +950,7 @@ footer {
   }
 
   /* Compact layouts for full audit output cards on mobile */
-  .cyber-table th, .cyber-table td {
+  .table-responsive .cyber-table th, .table-responsive .cyber-table td {
     padding: 0.5rem 0.4rem !important;
     font-size: 0.72rem !important;
   }
